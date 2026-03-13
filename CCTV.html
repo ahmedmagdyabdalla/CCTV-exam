@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Certification Exam</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .exam-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .exam-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #2ecc71;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .question-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .question-no {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .question-type {
+            background-color: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .question-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .options-list {
+            margin-left: 20px;
+        }
+        
+        .option-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .option-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .option-item.selected {
+            background-color: #e1f5fe;
+            border-left: 4px solid #3498db;
+        }
+        
+        .option-item.correct {
+            background-color: #e8f5e9;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .option-item.incorrect {
+            background-color: #ffebee;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .option-emphsis {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-prev {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-next {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-submit {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 20px 0;
+        }
+        
+        .pass {
+            color: #2ecc71;
+        }
+        
+        .fail {
+            color: #e74c3c;
+        }
+        
+        .review-answers {
+            margin-top: 30px;
+        }
+        
+        .review-item {
+            margin-bottom: 20px;
+            text-align: left;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+        
+        .review-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .review-answer {
+            margin-bottom: 5px;
+        }
+        
+        .correct-answer {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .user-answer.correct {
+            color: #2ecc71;
+        }
+        
+        .user-answer.incorrect {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CCTV Certification Exam</h1>
+            <p>Test your knowledge of CCTV systems, cameras, and NVR configurations</p>
+        </header>
+        
+        <div class="exam-info">
+            <div class="exam-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Questions</div>
+                    <div class="stat-value">39</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="current-score">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Time</div>
+                    <div class="stat-value" id="timer">30:00</div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div>Progress: <span id="progress-text">1/39</span></div>
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-list" id="question-container">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+        
+        <div class="controls">
+            <button class="btn-prev" id="prev-btn" disabled>Previous</button>
+            <button class="btn-next" id="next-btn">Next</button>
+            <button class="btn-submit" id="submit-btn" style="display: none;">Submit Exam</button>
+        </div>
+        
+        <div class="results" id="results-container">
+            <h2>Exam Results</h2>
+            <div class="score-display" id="final-score">0/39</div>
+            <div id="pass-fail-message"></div>
+            <p id="score-message"></p>
+            
+            <div class="review-answers" id="review-container">
+                <h3>Review Your Answers</h3>
+                <!-- Review content will be dynamically inserted here -->
+            </div>
+            
+            <button id="retry-btn" style="margin-top: 20px;">Retry Exam</button>
+        </div>
+    </div>
+
+    <script>
+        // Exam data extracted from the HTML
+        const examData = [
+            {
+                id: 1,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following features doesn't belong to Turbo HD analog cameras?",
+                options: [
+                    { id: "A", text: "HD TVI" },
+                    { id: "B", text: "PoE" },
+                    { id: "C", text: "4 in 1" },
+                    { id: "D", text: "Hik-Connect access" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                id: 2,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following statements about bandwidth control on NVR is incorrect?",
+                options: [
+                    { id: "A", text: "NVR can transcode original stream to transcoded stream for fluent remote view even under limited bandwidth" },
+                    { id: "B", text: "Channel zero is a single channel combining up to 16 channels related cameras' images" },
+                    { id: "C", text: "Incoming bandwidth is for remote view" },
+                    { id: "D", text: "User can edit the camera order of channel zero by configuring live view sequence of NVR's CVBS or VGA output" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 3,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following statements regarding RAID is incorrect?",
+                options: [
+                    { id: "A", text: "There are various RAID levels including RAID 0, RAID 1, RAID 5, RAID 6 and RAID 10" },
+                    { id: "B", text: "RAID is a storage technology that combines multiple HDDs into a logical unit" },
+                    { id: "C", text: "RAID 6 only allows 1 disk to get failed" },
+                    { id: "D", text: "RAID 0 provides higher reading speed but without redundancy" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 4,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following statements regarding N+M function is incorrect?",
+                options: [
+                    { id: "A", text: "One backup NVR can take over two offline working NVRs at one time" },
+                    { id: "B", text: "N means the number of working NVR while M means the number of backup NVR" },
+                    { id: "C", text: "When the network connection between cameras and the working NVR breaks down, cameras will switch to the backup NVR to continue recording" },
+                    { id: "D", text: "The limitation of both N and M is up to 32" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 5,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following statements regarding ANR is incorrect?",
+                options: [
+                    { id: "A", text: "In an event of network connection failure, NVR with ANR function can automatically retrieve and synchronize the video data from IPC when the connection is restored" },
+                    { id: "B", text: "It requires IP camera to install an SD card in advance" },
+                    { id: "C", text: "Backup NVR is necessary for ANR" },
+                    { id: "D", text: "With ANR function, only when the network breaks down, will the video start to be recorded in the SD card in the camera" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 6,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following statements regarding NVR recording management is incorrect?",
+                options: [
+                    { id: "A", text: "File lock can prevent the locked file from being overwritten even in cycle recording mode" },
+                    { id: "B", text: "The record file expires after it reaches the configured expired time" },
+                    { id: "C", text: "To configure the redundant recording, it requires the NVR to support RAID function" },
+                    { id: "D", text: "In HDD quota mode, each camera can be allocated with quota for the storage of recorded files and captured pictures" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 7,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following functions is recommended in corridor scenario?",
+                options: [
+                    { id: "A", text: "ROI" },
+                    { id: "B", text: "BLC" },
+                    { id: "C", text: "Rotate mode" },
+                    { id: "D", text: "WDR" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 8,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following descriptions about H.265+ is incorrect?",
+                options: [
+                    { id: "A", text: "H.264+ technology is a kind of intelligent algorithm developed by Hikvision. It focuses on the features of the surveillance video and is optimized based on the H.265/AVC. H.265+ decreases the bitrate of the surveillance video greatly so as to save the system cost" },
+                    { id: "B", text: "H.265+ is applicable for scenes with few background changes and no frequent moving objects" },
+                    { id: "C", text: "If it is a dynamic scene with many moving objects all the time, H.265+ can save half of the bandwidth compared with H.265" },
+                    { id: "D", text: "If it is fixed scene with few moving objects, by using H.265+ can save 50% of the bandwidth compared with H.265" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 9,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following descriptions about bit rate is incorrect?",
+                options: [
+                    { id: "A", text: "There are two types of bit rate:constant bit rate and variable bit rate" },
+                    { id: "B", text: "Under variable bit rate, the image quality is always good, whereas the bit rate is variable. It is suitable for dynamic scenes. By using VBR, we can estimate the bandwidth/storage consumption" },
+                    { id: "C", text: "In constant bit rate, the bit rate is supposed to be constant but as a result, the image quality is variable when the scene changes a lot. By using CBR, we can estimate the bandwidth/storage consumption" },
+                    { id: "D", text: "None of the above" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                id: 10,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of the following factors will affect the bandwidth and storage space?",
+                options: [
+                    { id: "A", text: "FPS" },
+                    { id: "B", text: "I-frame interval" },
+                    { id: "C", text: "Number of cameras" },
+                    { id: "D", text: "Video compression type" },
+                    { id: "E", text: "All of the above" }
+                ],
+                correctAnswer: "E"
+            },
+            {
+                id: 11,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of following statements about HDD modes is incorrect?",
+                options: [
+                    { id: "A", text: "In HDD quota mode, each camera can be allocated with quota for the storage of recorded files and captured pictures" },
+                    { id: "B", text: "In HDD group mode, different HDDs can be configured to different groups, and different cameras can be assigned to be recorded in different groups" },
+                    { id: "C", text: "The HDD group mode can be set only when there are at least 2 HDDs" },
+                    { id: "D", text: "The quota mode can only be set for 1 HDD storage space mannagement." }
+                ],
+                correctAnswer: "D"
+            },
+            {
+                id: 12,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of following features is not supported by PTRZ cameras?",
+                options: [
+                    { id: "A", text: "Smart Hybrid Light" },
+                    { id: "B", text: "Motorized Pan, Tilt, Rotate and Zoom" },
+                    { id: "C", text: "Remotely adjusted installation angle by NVR,Web and HPP" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 13,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of following audio technologies is not supported by Two-way audio Turbo HD cameras?",
+                options: [
+                    { id: "A", text: "AI noise reduction" },
+                    { id: "B", text: "Echo cancellation" },
+                    { id: "C", text: "Arrayed dual-mic" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                id: 14,
+                type: "Single Choice",
+                points: 3,
+                question: "Which of following resolution does not supported by Turbo HD cameras?",
+                options: [
+                    { id: "A", text: "8K" },
+                    { id: "B", text: "4K" },
+                    { id: "C", text: "3K" },
+                    { id: "D", text: "1080P" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 15,
+                type: "Multiple Choice",
+                points: 4,
+                question: "Which of the following statements about Smart hybrid camera with ColorVu DS-2CD2xx7G2-LISU/SL is correct?",
+                options: [
+                    { id: "A", text: "Camera supports ColorVu and AcuSense at the same time" },
+                    { id: "B", text: "Camera has 3 supplement lighting modes" },
+                    { id: "C", text: "Camera has Super confocal lens which can provide clear image around the clock" },
+                    { id: "D", text: "Camera supports real-time light and audio alarm." }
+                ],
+                correctAnswer: ["A", "B", "C", "D"]
+            },
+            {
+                id: 16,
+                type: "Multiple Choice",
+                points: 3,
+                question: "Which of the following technologies can improve the image quality at night?",
+                options: [
+                    { id: "A", text: "AGC" },
+                    { id: "B", text: "3D DNR" },
+                    { id: "C", text: "Smart Hybrid Light" },
+                    { id: "D", text: "Super confocal Lens" }
+                ],
+                correctAnswer: ["A", "B", "C", "D"]
+            },
+            {
+                id: 17,
+                type: "Multiple Choice",
+                points: 3,
+                question: "Which one of the following functions is supported by Hikvision NVR?",
+                options: [
+                    { id: "A", text: "IPC deployment" },
+                    { id: "B", text: "Local live view and playback" },
+                    { id: "C", text: "Data storage" },
+                    { id: "D", text: "Non video management" }
+                ],
+                correctAnswer: ["A", "B", "C", "D"]
+            },
+            {
+                id: 18,
+                type: "Multiple Choice",
+                points: 3,
+                question: "What kinds of methods can we use for IP camera's activation?",
+                options: [
+                    { id: "A", text: "Use the SADP tool to activate the IP camera in the same network sagment" },
+                    { id: "B", text: "Access to address 192.168.1.64 to login the web client of IP camera to activate the devices" },
+                    { id: "C", text: "Activate the IP camera on NVR GUI by searching it in the online device list." }
+                ],
+                correctAnswer: ["A", "B", "C"]
+            },
+            {
+                id: 19,
+                type: "Multiple Choice",
+                points: 4,
+                question: "What kinds of self-password reset methods does Hikvision provide for user?",
+                options: [
+                    { id: "A", text: "Via Account Verification" },
+                    { id: "B", text: "Via Reserved Email" },
+                    { id: "C", text: "Via Security Questions" },
+                    { id: "D", text: "Via GUID FileVia XML File" }
+                ],
+                correctAnswer: ["A", "B", "C", "D"]
+            },
+            {
+                id: 20,
+                type: "Multiple Choice",
+                points: 3,
+                question: "What kinds of standard coaxial cables do we used for Turbo HD system connection?",
+                options: [
+                    { id: "A", text: "UTP Cat-5e" },
+                    { id: "B", text: "RG59" },
+                    { id: "C", text: "RG6" },
+                    { id: "D", text: "CAT6" }
+                ],
+                correctAnswer: ["A", "B", "C"]
+            },
+            {
+                id: 21,
+                type: "True or False",
+                points: 2,
+                question: "eSATA can be used for recording, capturing and exporting data.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 22,
+                type: "True or False",
+                points: 2,
+                question: "DarkFighter X has dual-sensor design to generate two images, one with good brightness, the other with good chroma, then two images combine to form one full color image.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 23,
+                type: "True or False",
+                points: 2,
+                question: "Turbo HD Smart Hybrid Light camera with ColorVu KF3T-L has F1.0 super aperture, and the illumination of it can be 0.0005Lux.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 24,
+                type: "True or False",
+                points: 2,
+                question: "The OSD information such as date, time, camera name and even some text can be overlaid on the live video of Hikvision cameras.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 25,
+                type: "True or False",
+                points: 2,
+                question: "A higher frame rate camera which can reach up to 50/60 fps is advantageous when there are some fast moving objects in the area.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 26,
+                type: "True or False",
+                points: 2,
+                question: "ROI (Region of Interest) function assigns more encoding resource to the region of interest in order to increase the quality of the ROI while the background information gets less focused.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 27,
+                type: "True or False",
+                points: 2,
+                question: "When we configure intrusion detection, sensitivity stands for the percentage of the body part of an acceptable target that enters the pre-defined region",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 28,
+                type: "True or False",
+                points: 2,
+                question: "To build a RAID 5, at least 3 hard drives are required.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 29,
+                type: "True or False",
+                points: 2,
+                question: "When an IP camera has a built-in SD card, it will always store pre-record videos in the SD card even ANR function is not enabled.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                id: 30,
+                type: "True or False",
+                points: 2,
+                question: "If an IPC is plugged into the PoE port of an NVR, and the NVR is in the same LAN with the operator PC. Then the operator can enable the NVR virtual host function to log in the web page of the IPC even the IPC and NVR are in different network segments.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 31,
+                type: "True or False",
+                points: 2,
+                question: "Hikvision NVR can export its IP channels as an editable excel which can be imported to another NVR of the same model.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 32,
+                type: "True or False",
+                points: 2,
+                question: "If an user want to check the real-time alarm notificatio on NVR GUI5.0, he needs to go to the Event Display in Event Center and check the alarm in real-time.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 33,
+                type: "True or False",
+                points: 2,
+                question: "Slice playback on GUI5.0 allows users to focus on events faster based on time.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 34,
+                type: "True or False",
+                points: 2,
+                question: "On GUI5.0 during the playback, users can customize rule box/rule line on the image, and the video records containing human or vehicle that triggered the rule will be highlighted on the timeline, to help users quickly search for records of interest.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 35,
+                type: "True or False",
+                points: 2,
+                question: "All models in Value series IP camera support enhanced audio 2.0.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                id: 36,
+                type: "True or False",
+                points: 2,
+                question: "For two-way audio Turbo HD camera with Live guard functionn, when we initiate two-way audio, the strobe light & audio alarm will automatically close.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 37,
+                type: "True or False",
+                points: 2,
+                question: "For Hikvision PoE plug & play function, we need to make sure that the IP camera is in active status or set as the same password of the PoE NVR.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                id: 38,
+                type: "True or False",
+                points: 2,
+                question: "DNR expert mode supports configuring space DNR and time DNR separately.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                id: 39,
+                type: "True or False",
+                points: 2,
+                question: "130 dB is called true WDR, which can provide a better imaging performance against the strong backlight.",
+                options: [
+                    { id: "A", text: "True" },
+                    { id: "B", text: "False" }
+                ],
+                correctAnswer: "A"
+            }
+        ];
+
+        // State management
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(examData.length).fill(null);
+        let score = 0;
+        let timeLeft = 30 * 60; // 30 minutes in seconds
+        let timerInterval;
+
+        // DOM elements
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const currentScore = document.getElementById('current-score');
+        const timer = document.getElementById('timer');
+        const resultsContainer = document.getElementById('results-container');
+        const finalScore = document.getElementById('final-score');
+        const passFailMessage = document.getElementById('pass-fail-message');
+        const scoreMessage = document.getElementById('score-message');
+        const reviewContainer = document.getElementById('review-container');
+        const retryBtn = document.getElementById('retry-btn');
+
+        // Initialize the exam
+        function initExam() {
+            renderQuestion();
+            startTimer();
+            updateProgress();
+            updateScore();
+        }
+
+        // Render the current question
+        function renderQuestion() {
+            const question = examData[currentQuestionIndex];
+            const userAnswer = userAnswers[currentQuestionIndex];
+            
+            let optionsHTML = '';
+            question.options.forEach(option => {
+                const isSelected = userAnswer && (
+                    Array.isArray(userAnswer) 
+                        ? userAnswer.includes(option.id)
+                        : userAnswer === option.id
+                );
+                
+                optionsHTML += `
+                    <div class="option-item ${isSelected ? 'selected' : ''}" data-option="${option.id}">
+                        <span class="option-emphsis">${option.id}.</span>
+                        <span class="option-content">${option.text}</span>
+                    </div>
+                `;
+            });
+
+            const questionHTML = `
+                <div class="question-item">
+                    <div class="question-header">
+                        <div class="question-no">Question <span class="emphasis">${question.id}</span>/39</div>
+                        <div class="question-type">${question.type} (${question.points} points)</div>
+                    </div>
+                    <div class="question-title">${question.question}</div>
+                    <div class="options-list">
+                        ${optionsHTML}
+                    </div>
+                    <div class="feedback ${userAnswer ? (checkAnswer(currentQuestionIndex) ? 'correct' : 'incorrect') : ''}">
+                        ${userAnswer ? (checkAnswer(currentQuestionIndex) ? 'Correct!' : `Incorrect. The right answer is: ${Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}`) : ''}
+                    </div>
+                </div>
+            `;
+
+            questionContainer.innerHTML = questionHTML;
+
+            // Add event listeners to options
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.addEventListener('click', () => selectOption(item.dataset.option));
+            });
+
+            // Update button states
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === examData.length - 1;
+            
+            if (currentQuestionIndex === examData.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Select an option
+        function selectOption(optionId) {
+            const question = examData[currentQuestionIndex];
+            
+            if (question.type === "Multiple Choice") {
+                if (!userAnswers[currentQuestionIndex]) {
+                    userAnswers[currentQuestionIndex] = [];
+                }
+                
+                const index = userAnswers[currentQuestionIndex].indexOf(optionId);
+                if (index === -1) {
+                    userAnswers[currentQuestionIndex].push(optionId);
+                } else {
+                    userAnswers[currentQuestionIndex].splice(index, 1);
+                }
+            } else {
+                userAnswers[currentQuestionIndex] = optionId;
+            }
+            
+            renderQuestion();
+            updateScore();
+        }
+
+        // Check if the answer is correct
+        function checkAnswer(questionIndex) {
+            const question = examData[questionIndex];
+            const userAnswer = userAnswers[questionIndex];
+            
+            if (!userAnswer) return false;
+            
+            if (Array.isArray(question.correctAnswer)) {
+                // For multiple choice questions
+                if (!Array.isArray(userAnswer)) return false;
+                if (userAnswer.length !== question.correctAnswer.length) return false;
+                
+                return userAnswer.every(answer => question.correctAnswer.includes(answer)) &&
+                       question.correctAnswer.every(answer => userAnswer.includes(answer));
+            } else {
+                // For single choice and true/false questions
+                return userAnswer === question.correctAnswer;
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / examData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestionIndex + 1}/${examData.length}`;
+        }
+
+        // Update score
+        function updateScore() {
+            score = 0;
+            examData.forEach((question, index) => {
+                if (checkAnswer(index)) {
+                    score += question.points;
+                }
+            });
+            currentScore.textContent = score;
+        }
+
+        // Start timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (currentQuestionIndex < examData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+                updateProgress();
+            }
+        }
+
+        // Navigate to previous question
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+                updateProgress();
+            }
+        }
+
+        // Submit exam
+        function submitExam() {
+            clearInterval(timerInterval);
+            
+            // Calculate final score
+            updateScore();
+            
+            // Calculate total possible score
+            const totalPoints = examData.reduce((total, question) => total + question.points, 0);
+            
+            // Determine pass/fail (assuming 70% is passing)
+            const passingScore = totalPoints * 0.7;
+            const passed = score >= passingScore;
+            
+            // Display results
+            finalScore.textContent = `${score}/${totalPoints}`;
+            finalScore.className = `score-display ${passed ? 'pass' : 'fail'}`;
+            passFailMessage.textContent = passed ? 'Congratulations! You passed the exam.' : 'Sorry, you did not pass the exam.';
+            passFailMessage.className = passed ? 'pass' : 'fail';
+            scoreMessage.textContent = `You scored ${score} out of ${totalPoints} possible points.`;
+            
+            // Generate review
+            let reviewHTML = '';
+            examData.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = checkAnswer(index);
+                
+                reviewHTML += `
+                    <div class="review-item">
+                        <div class="review-question">${index + 1}. ${question.question}</div>
+                        <div class="review-answer">
+                            Your answer: 
+                            <span class="user-answer ${isCorrect ? 'correct' : 'incorrect'}">
+                                ${userAnswer ? (Array.isArray(userAnswer) ? userAnswer.join(', ') : userAnswer) : 'Not answered'}
+                            </span>
+                        </div>
+                        <div class="review-answer correct-answer">
+                            Correct answer: ${Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            reviewContainer.innerHTML += reviewHTML;
+            
+            // Show results container
+            resultsContainer.style.display = 'block';
+            questionContainer.style.display = 'none';
+            document.querySelector('.exam-info').style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+        }
+
+        // Retry exam
+        function retryExam() {
+            // Reset state
+            currentQuestionIndex = 0;
+            userAnswers = Array(examData.length).fill(null);
+            score = 0;
+            timeLeft = 30 * 60;
+            
+            // Reset UI
+            resultsContainer.style.display = 'none';
+            questionContainer.style.display = 'block';
+            document.querySelector('.exam-info').style.display = 'flex';
+            document.querySelector('.controls').style.display = 'flex';
+            
+            // Restart exam
+            initExam();
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        submitBtn.addEventListener('click', submitExam);
+        retryBtn.addEventListener('click', retryExam);
+
+        // Initialize the exam
+        initExam();
+    </script>
+</body>
+</html>
