@@ -1,2 +1,0 @@
-# CCTV-exam
-CCTV exam
